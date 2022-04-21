@@ -299,3 +299,69 @@ exports.search = async (req, res) => {
     }
 
 }
+
+exports.genre_list = async (req, res) => {
+    const url = `${kiryuuUrl}manga`;
+
+    try {
+        const response = await Axios(url);
+        const $ = cheerio.load(response.data);
+        
+        const element = $('.dropdown-menu.c4.genrez');
+
+        let data = [];
+
+        element.find('li').each((i, el) => {
+            data.push({
+                id: $(el).find('input').attr('value'),
+                title: $(el).find('label').text().trim()
+            });
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+
+
+    }catch(e){
+        console.log(e.message);
+    }
+}
+
+exports.genre_detail = async (req, res) => {
+    const id = req.params.id;
+    const page = req.params.page;
+    const url = `${kiryuuUrl}manga/?page=${page}&genre%5B%5D=${id}`;
+
+    try {
+        const response = await Axios(url);
+        const $ = cheerio.load(response.data);
+        
+        const element = $('.mrgn > .listupd');
+
+        let data = [];
+
+        element.find('.bs').each((i, el) => {
+            let id, title, img, rating, type;
+
+            id = $(el).find('.bsx > a').attr('href').replace(`${kiryuuUrl}manga/`, '');
+            title = $(el).find('.bsx > a > .bigor > .tt').text().trim();
+            img = $(el).find('.bsx > a > .limit > img').attr('src').replace('-222x300', '')
+                .replace('-211x300', '').replace('-210x300', '').replace('-210x300', '').replace('-209x300', '');
+            type = $(el).find('.bsx > a > .limit > .type').attr('class').replace('type', '').trim();
+            rating = $(el).find('.bsx > a > .bigor > .adds > .rt > .rating > .numscore').text().trim();
+
+            data.push({id, title, img, type, rating});
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+
+
+    }catch(e){
+        console.log(e.message);
+    }
+}

@@ -11,5 +11,7 @@ router.get('/kiryuu-manhua-list/:page', kiryuuController.manhuwa_list)
 router.get('/kiryuu-detail/:id', kiryuuController.detail)
 router.get('/kiryuu-chapter/:id', kiryuuController.chapter)
 router.get('/kiryuu-search/:q/page/:page', kiryuuController.search)
+router.get('/kiryuu-genres', kiryuuController.genre_list)
+router.get('/kiryuu-genre/:id/page/:page', kiryuuController.genre_detail)
 
 module.exports = router
