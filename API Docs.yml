@@ -1,9 +1,9 @@
 openapi: '3.0.2'
 info:
-  title: API Title
+  title: Mangain Rest API
   version: '1.0'
 servers:
-  - url: http://localhost:5000
+  - url: http://128.199.79.183:5000
 
 paths:
   /api/home:
