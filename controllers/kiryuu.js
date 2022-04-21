@@ -26,10 +26,11 @@ exports.home = async (req, res) => {
             title = $(el).find('.bsx > a > .bigor > .tt').text().trim();
             img = $(el).find('.bsx > a > .limit > img').attr('src').replace('-222x300', '')
                 .replace('-211x300', '').replace('-210x300', '').replace('-210x300', '').replace('-209x300', '');
+            chapter = $(el).find('.bsx > a > .bigor > .adds > .epxs').text().trim();
             type = $(el).find('.bsx > a > .limit > .type').attr('class').replace('type', '').trim();
             rating = $(el).find('.bsx > a > .bigor > .adds > .rt > .rating > .numscore').text().trim();
 
-            popular.push({id, title, img, type, rating});
+            popular.push({id, title, img, chapter, type, rating});
         })
 
         newSeriesElement.find('li').each((i, el) => {
