@@ -60,7 +60,7 @@ exports.detail = async (req, res) => {
         const genreElement = $('.seriestugenre')
 
         let manga = {};
-        let episodes = [];
+        let chapter = [];
         let genres = [];
 
         manga.banner = $('.bigcover > .bigbanner').attr('style').replace("background-image: url('", '').replace("');", '');
@@ -84,11 +84,11 @@ exports.detail = async (req, res) => {
             let title = $(el).find('.chbox > .eph-num > a > .chapternum').text().trim();
             let upload_on = $(el).find('.chbox > .eph-num > a > .chapterdate').text().trim();
 
-            episodes.push({id, title, upload_on});
+            chapter.push({id, title, upload_on});
         })
 
         manga.genres = genres;
-        manga.episodes = episodes;
+        manga.chapters = chapter;
         res.status(200).json({
             status: 'success',
             manga
