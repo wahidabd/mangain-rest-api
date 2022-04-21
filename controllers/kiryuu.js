@@ -9,10 +9,15 @@ exports.home = async (req, res) => {
         const $ = cheerio.load(response.data);
         const popularElement = $('.hotslid > .bixbox > .listupd')
         const newSeriesElement = $('#sidebar > .section > span > .serieslist > ul')
+        const newReleaseElement = $('.postbody > .bixbox > .listupd')
 
         let home = {};
         let popular = [];
         let newSeries = [];
+        let newRelease = [];
+
+        home.wrapper_id = $('.wrapper > center > a').attr('href').replace(`${kiryuuUrl}manga/`, '');
+        home.wrapper_img = $('.wrapper > center > a > img').attr('src');
 
         popularElement.find('.bs').each((i, el) => {
             let id, title, img, rating, type, chapter;
@@ -32,11 +37,26 @@ exports.home = async (req, res) => {
 
             id = $(el).find('.imgseries > a').attr('href').replace(`${kiryuuUrl}manga/`, '');
             img = $(el).find('.imgseries > a > img').attr('src');
-            title = $(el).find('.leftseries > h2 > a').text();
+            title = $(el).find('.leftseries > h2 > a').text().trim();
 
             newSeries.push({id, title, img});
         })
 
+        newReleaseElement.find('.utao').each((i, el) => {
+            
+            if(i > 8){
+                let id = $(el).find('.uta > .luf > a').attr('href').replace(`${kiryuuUrl}manga/`, '');
+                let title = $(el).find('.uta > .luf > a > h4').text();
+                let img = $(el).find('.uta > .imgu > a > img').attr('src');
+                let chapter = $(el).find('.uta > .luf > ul > li:nth-child(1) > a').text().trim();
+                let update_on = $(el).find('.uta > .luf > ul > li:nth-child(1) > span').text().trim();
+
+                newRelease.push({id, title, img, chapter, update_on});
+            }
+
+        })
+
+        home.new_release = newRelease;
         home.popular = popular;
         home.new_series = newSeries
 
