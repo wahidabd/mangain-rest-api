@@ -267,12 +267,19 @@ exports.chapter = async (req, res) => {
         const $ = cheerio.load(response.data);
 
         let chapter = {};
+        let data = [];
 
         chapter.title = $('.entry-title').text().replace('Bahasa Indonesia', '').trim();
 
-        chapter.data = $('#readerarea').text().replace('<p>', '').replace('</p>', '')
-            .replace(" ", '').replace("img", '')
-            .replace(/src='|'><|'>|<|/gi, '').split('img ')
+        // chapter.data = $('#readerarea').text().replace('<p>', '').replace('</p>', '')
+        //     .replace(" ", '').replace("img", '')
+        //     .replace(/src='|'><|'>|<|>| |src=|data-no=1|data-no=2|data-no=3|"|br|/gi, '').split('img')
+
+        chapter.img = $('#readerarea >').text()
+        // .each((i, el) => {
+        //     let src = $(el).attr('class');
+        //     data.push({src});
+        // })
 
         res.status(200).json({
             status: 'success',
