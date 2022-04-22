@@ -322,3 +322,40 @@ exports.komik = async (req, res) => {
         console.log(e.message);
     }
 }
+
+exports.search = async (req, res) => {
+    const s = req.params.s
+    const page = req.params.page
+    const url = `${komikindoUrl}page/${page}/?s=${s}`
+
+    try {
+        const response = await Axios(url)
+        const $ = cheerio.load(response.data)
+        const element = $('.film-list > .animepost')
+
+        const data = []
+
+        element.each((i, el) => {
+            let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
+            let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
+            let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
+
+            if(type === 'hot'){
+                type = $(el).find('.animposx > a > .limit > .typeflag').attr('class').replace('typeflag ', '')
+            }
+
+            data.push({id, title, cover, type, rating})
+
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    }catch(e){
+        res.json(e)
+        console.log(e.message);
+    }
+}
