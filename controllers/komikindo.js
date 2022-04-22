@@ -76,6 +76,10 @@ exports.detail = async (req, res) => {
         manga.vote = $('.infoanime > .thumb > .rt > .ratingmanga > .rtg > .clearfix.archiveanime-rating > .archiveanime-rating-content > .votescount').text()
         manga.synopsis = $('.tabsarea > #sinopsis > .whites > .desc > .entry-content.entry-content-single > p').text()
 
+        if(manga.type !== "Manga" || manga.type !== "Manhwa" || manga.type !== "Manhua"){
+            manga.type = $('.infoanime > .infox > .spe > span:nth-child(7)').text().replace('Jenis Komik: ', '')
+        }
+
         genreElement.find('a').each((i, el) => {
             let title = $(el).text()
             let id = $(el).attr('href').replace('/genres/', '')
