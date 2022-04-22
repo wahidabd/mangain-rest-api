@@ -2,6 +2,7 @@ const {default: Axios} = require('axios')
 const cheerio = require('cheerio')  
 const { text } = require('cheerio/lib/static')
 const url = require('../helpers/urls')
+const { route } = require('../router')
 const komikindoUrl = url.komikindoUrl
 
 exports.home = async (req, res) => {
@@ -165,6 +166,102 @@ exports.genre_list = async (req, res) => {
     const id = req.params.id
     const page = req.params.page
     const url = `${komikindoUrl}daftar-komik/page/${page}/?genre%5B0%5D=${id}`
+
+    try {
+        const response = await Axios(url)
+        const $ = cheerio.load(response.data)
+        const element = $('.film-list > .animepost')
+
+        const data = []
+
+        element.each((i, el) => {
+            let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
+            let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
+            let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
+
+            data.push({id, title, cover, type, rating})
+
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    }catch(e){
+        res.json(e)
+        console.log(e.message);
+    }
+}
+
+exports.daftar_komik = async (req, res) => {
+    const page = req.params.page
+    const url = `${komikindoUrl}daftar-komik/page/${page}`
+
+    try {
+        const response = await Axios(url)
+        const $ = cheerio.load(response.data)
+        const element = $('.film-list > .animepost')
+
+        const data = []
+
+        element.each((i, el) => {
+            let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
+            let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
+            let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
+
+            data.push({id, title, cover, type, rating})
+
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    }catch(e){
+        res.json(e)
+        console.log(e.message);
+    }
+}
+
+exports.manhwa = async (req, res) => {
+    const page = req.params.page
+    const url = `${komikindoUrl}manhwa/page/${page}`
+
+    try {
+        const response = await Axios(url)
+        const $ = cheerio.load(response.data)
+        const element = $('.film-list > .animepost')
+
+        const data = []
+
+        element.each((i, el) => {
+            let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
+            let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
+            let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
+
+            data.push({id, title, cover, type, rating})
+
+        })
+
+        res.status(200).json({
+            status: 'success',
+            data
+        })
+    }catch(e){
+        res.json(e)
+        console.log(e.message);
+    }
+}
+
+exports.manhua = async (req, res) => {
+    const page = req.params.page
+    const url = `${komikindoUrl}manhua/page/${page}`
 
     try {
         const response = await Axios(url)

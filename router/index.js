@@ -22,5 +22,8 @@ router.get('/komikindo-detail/:id', komikindoController.detail)
 router.get('/komikindo-ch/:id', komikindoController.chapter)
 router.get('/komikindo-genres', komikindoController.genres)
 router.get('/komikindo-genre/:id/page/:page', komikindoController.genre_list)
+router.get('/komikindo-daftar/:page', komikindoController.daftar_komik)
+router.get('/komikindo-manhwa/:page', komikindoController.manhwa)
+router.get('/komikindo-manhua/:page', komikindoController.manhua)
 
 module.exports = router
