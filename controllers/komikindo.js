@@ -126,7 +126,8 @@ exports.chapter = async (req, res) => {
 
         chElemet.find('#chimg-auh > img').each((i, el) => {
             let img = $(el).attr('src')
-            data.push(img)
+            let num = i
+            data.push({num, img})
         })
 
         chapter.data = data;
