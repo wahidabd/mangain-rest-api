@@ -246,9 +246,15 @@ exports.manhwa = async (req, res) => {
         element.each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src')
             let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
             let rating = $(el).find('.animposx > a > .bigors > .adds > .rating > i').text()
+
+            if(cover != null){
+                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
 
             data.push({id, title, cover, type, rating})
 
@@ -278,9 +284,15 @@ exports.manhua = async (req, res) => {
         element.each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src')
             let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
             let rating = $(el).find('.animposx > a > .bigors > .adds > .rating > i').text()
+
+            if(cover != null){
+                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
 
             data.push({id, title, cover, type, rating})
 
@@ -298,7 +310,7 @@ exports.manhua = async (req, res) => {
 
 exports.komik = async (req, res) => {
     const page = req.params.page
-    const url = `${komikindoUrl}komik-terbaru/page/${page}`
+    const url = page === "1" ? `${komikindoUrl}komik-terbaru` :  `${komikindoUrl}komik-terbaru/page/${page}`
 
     try {
         const response = await Axios(url)
@@ -310,9 +322,15 @@ exports.komik = async (req, res) => {
         element.each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src')
             let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
             let update_on = $(el).find('.animposx > .bigor > .adds > .lsch > .datech').text()
+
+            if(cover != null){
+                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
 
             data.push({id, title, cover, type, update_on    })
 
