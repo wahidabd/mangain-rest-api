@@ -18,7 +18,7 @@ exports.home = async (req, res) => {
 
         popularDayElement.find('.animepost').each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
-            let title = $(el).find('.animposx > a').attr('title')
+            let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
             let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
             let type = $(el).find('.animposx > a > .limit > .typeflag').attr('class').replace('typeflag ', '')
             let update_on = $(el).find('.animposx > .bigor > .adds > .lsch > .datech').text()
