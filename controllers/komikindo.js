@@ -134,7 +134,10 @@ exports.chapter = async (req, res) => {
         chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href')
         chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href')
         if(chapter.next == null) {
-            chapter.next = null
+            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href')
+            if(chapter.next == null){
+                chapter.next = null
+            }
         }
 
         chElemet.find('#chimg-auh > img').each((i, el) => {
