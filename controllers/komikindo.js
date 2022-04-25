@@ -135,7 +135,10 @@ exports.chapter = async (req, res) => {
         chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href')
         if(chapter.next == null) {
             chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href')
-            if(chapter.next == null){
+            let check = $('.navig > .nextprev > a:nth-child(3)').attr('target')
+            console.log(check)
+
+            if(check == "_blank" || chapter.next == null){
                 chapter.next = null
             }
         }
