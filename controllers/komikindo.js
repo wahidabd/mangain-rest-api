@@ -11,10 +11,22 @@ exports.home = async (req, res) => {
         const $ = cheerio.load(response.data)
         const popularDayElement = $('.postbody > .whites > .widget-body > .content > .post-show.mangapopuler > .listupd.customslider > .odadingslider')
         const newElement = $('.post-show.chapterbaru > .listupd.latestupdate-v2 > .animepost')
+        const popularElement = $('.serieslist.pop > ul > li')
 
         const home = {}
         let popularDay = []
         let newManga = []
+        let popular = []
+
+        popularElement.each((i, el) => {
+            let id = $(el).find('.imgseries > a').attr('href').replace(`${komikindoUrl}komik/`, '')
+            let title =  $(el).find('.leftseries > h4 > a').text()
+            let cover =  $(el).find('.imgseries > a > img').attr('src').replace('i2.wp.com/', '').replace('?resize=59,83', '')
+            let love = $(el).find('.leftseries > .loveviews').text()
+            let num = $(el).find('.leftseries > div').text()
+
+            popular.push({id, title, cover, love, num})
+        })
 
         popularDayElement.find('.animepost').each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
@@ -38,6 +50,7 @@ exports.home = async (req, res) => {
             newManga.push({id, title, cover, status, type, rating, views, color})
         })
 
+        home.popular = popular
         home.new_manga = newManga
         home.popular_day = popularDay
         res.status(200).json({
@@ -214,9 +227,15 @@ exports.daftar_komik = async (req, res) => {
         element.each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src')
             let type = $(el).find('.animposx > a > .limit > span').attr('class').replace('typeflag ', '')
             let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
+
+            if(cover != null){
+                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
 
             data.push({id, title, cover, type, rating})
 
