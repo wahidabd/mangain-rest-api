@@ -21,9 +21,15 @@ exports.home = async (req, res) => {
         popularElement.each((i, el) => {
             let id = $(el).find('.imgseries > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title =  $(el).find('.leftseries > h4 > a').text()
-            let cover =  $(el).find('.imgseries > a > img').attr('src').replace('i2.wp.com/', '').replace('?resize=59,83', '')
+            let cover =  $(el).find('.imgseries > a > img').attr('src')//.replace('i2.wp.com/', '').replace('?resize=59,83', '')
             let love = $(el).find('.leftseries > .loveviews').text()
             let num = $(el).find('.leftseries > div').text()
+
+            if(cover != null){
+                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
 
             popular.push({id, title, cover, love, num})
         })
@@ -89,6 +95,12 @@ exports.detail = async (req, res) => {
         manga.vote = $('.infoanime > .thumb > .rt > .ratingmanga > .rtg > .clearfix.archiveanime-rating > .archiveanime-rating-content > .votescount').text()
         manga.synopsis = $('.tabsarea > #sinopsis > .whites > .desc > .entry-content.entry-content-single > p').text()
 
+        if(manga.cover == null){
+            manga.cover = null
+        }else{
+            manga.cover = $('.infoanime > .thumb > img').attr('src').replace('i2.wp.com/', '')
+        }
+
         if(manga.type !== "Manga" || manga.type !== "Manhwa" || manga.type !== "Manhua"){
             manga.type = $('.infoanime > .infox > .spe > span:nth-child(7)').text().replace('Jenis Komik: ', '')
         }
@@ -131,16 +143,27 @@ exports.chapter = async (req, res) => {
         let data = [];
 
         chapter.title = $('.entry-title').text().replace('Komik ', '');
-        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href')
+        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href').replace(`${komikindoUrl}`, '')
         chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href')
+
+        if(chapter.prev.search('komik/') !== -1){
+            chapter.prev = null
+        }
+
+        
         if(chapter.next == null) {
-            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href')
+
+            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
             let check = $('.navig > .nextprev > a:nth-child(3)').attr('target')
             console.log(check)
 
             if(check == "_blank" || chapter.next == null){
                 chapter.next = null
+            }else{
+                chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
             }
+        }else{
+            chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href').replace(`${komikindoUrl}`, '')
         }
 
         chElemet.find('#chimg-auh > img').each((i, el) => {
