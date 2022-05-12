@@ -1,8 +1,6 @@
 const {default: Axios} = require('axios')
 const cheerio = require('cheerio')  
-const { text } = require('cheerio/lib/static')
 const url = require('../helpers/urls')
-const { route } = require('../router')
 const komikindoUrl = url.komikindoUrl
 
 exports.home = async (req, res) => {
@@ -26,7 +24,7 @@ exports.home = async (req, res) => {
             let num = $(el).find('.leftseries > div').text()
 
             if(cover != null){
-                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+                cover =  $(el).find('.imgseries > a > img').attr('src').replace('i2.wp.com/', '').replace('?resize=59,83', '')
             } else {
                 cover = ""
             }
@@ -37,22 +35,35 @@ exports.home = async (req, res) => {
         popularDayElement.find('.animepost').each((i, el) => {
             let id = $(el).find('.animposx > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            let cover = $(el).find('.animposx > a > .limit > img').attr('src')//.replace('i2.wp.com/', '').replace('?resize=146,208', '')
             let type = $(el).find('.animposx > a > .limit > .typeflag').attr('class').replace('typeflag ', '')
             let update_on = $(el).find('.animposx > .bigor > .adds > .lsch > .datech').text()
             
+            if(cover != null){
+                cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
+            } else {
+                cover = ""
+            }
+
             popularDay.push({id, title, cover, type, update_on})
         })
 
         newElement.each((i, el) => {
             let id = $(el).find('.animposx > .animepostxx-top > a').attr('href').replace(`${komikindoUrl}komik/`, '')
             let title = $(el).find('.animposx > .animepostxx-top > a').attr('title').replace('Komik ', '')
-            let cover = $(el).find('.animposx > .animepostxx-top > a > .limietles > img').attr('src').replace('i2.wp.com/', '').replace('?resize=60,60', '')
+            let cover = $(el).find('.animposx > .animepostxx-top > a > .limietles > img').attr('src')//.replace('i2.wp.com/', '').replace('?resize=60,60', '')
             let status = $(el).find('.animposx > .animepostxx-bottom > .info-skroep > .flex-skroep.nginfo-skroep.status-skroep').text().replace('\n ', '').replace(' ', '')
             let type = $(el).find('.animposx > .animepostxx-top > .animepostxx-top-bottom > a > .info-skroep > div:nth-child(2)').text().replace('\n ', '').replace(' ', '')
             let rating = $(el).find('.animposx > .animepostxx-top > .animepostxx-top-bottom > a > .info-skroep > div:nth-child(1)').text().replace('\n ', '').replace(' ', '')
             let views = $(el).find('.animposx > .animepostxx-top > .animepostxx-top-bottom > a > .info-skroep > div:nth-child(3)').text().replace('\n ', '').replace(' ', '')
             let color = $(el).find('.animposx > .animepostxx-top > .animepostxx-top-bottom > a > .info-skroep > div:nth-child(4)').text().replace('\n ', '').replace('\n', '')
+
+            if(cover != null){
+                cover = $(el).find('.animposx > .animepostxx-top > a > .limietles > img').attr('src').replace('i2.wp.com/', '').replace('?resize=60,60', '')
+            } else {
+                cover = ""
+            }
+
             newManga.push({id, title, cover, status, type, rating, views, color})
         })
 
@@ -64,7 +75,7 @@ exports.home = async (req, res) => {
             home
         })
     }catch(e){
-        res.json(e)
+        // res.json(e)
         console.log(e.message);
     }
 }
@@ -94,12 +105,6 @@ exports.detail = async (req, res) => {
         manga.rating = $('.infoanime > .thumb > .rt > .ratingmanga > .rtg > .clearfix.archiveanime-rating > i').text()
         manga.vote = $('.infoanime > .thumb > .rt > .ratingmanga > .rtg > .clearfix.archiveanime-rating > .archiveanime-rating-content > .votescount').text()
         manga.synopsis = $('.tabsarea > #sinopsis > .whites > .desc > .entry-content.entry-content-single > p').text()
-
-        if(manga.cover == null){
-            manga.cover = null
-        }else{
-            manga.cover = $('.infoanime > .thumb > img').attr('src').replace('i2.wp.com/', '')
-        }
 
         if(manga.type !== "Manga" || manga.type !== "Manhwa" || manga.type !== "Manhua"){
             manga.type = $('.infoanime > .infox > .spe > span:nth-child(7)').text().replace('Jenis Komik: ', '')
@@ -143,27 +148,16 @@ exports.chapter = async (req, res) => {
         let data = [];
 
         chapter.title = $('.entry-title').text().replace('Komik ', '');
-        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href').replace(`${komikindoUrl}`, '')
+        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href')
         chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href')
-
-        if(chapter.prev.search('komik/') !== -1){
-            chapter.prev = null
-        }
-
-        
         if(chapter.next == null) {
-
-            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
+            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href')
             let check = $('.navig > .nextprev > a:nth-child(3)').attr('target')
             console.log(check)
 
             if(check == "_blank" || chapter.next == null){
                 chapter.next = null
-            }else{
-                chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
             }
-        }else{
-            chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href').replace(`${komikindoUrl}`, '')
         }
 
         chElemet.find('#chimg-auh > img').each((i, el) => {
