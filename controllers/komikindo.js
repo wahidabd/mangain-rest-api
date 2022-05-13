@@ -148,16 +148,27 @@ exports.chapter = async (req, res) => {
         let data = [];
 
         chapter.title = $('.entry-title').text().replace('Komik ', '');
-        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href')
+        chapter.prev = $('.navig > .nextprev > a:nth-child(1)').attr('href').replace(`${komikindoUrl}`, '')
         chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href')
+
+        if(chapter.prev.search('komik/') !== -1){
+            chapter.prev = null
+        }
+
+        
         if(chapter.next == null) {
-            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href')
+
+            chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
             let check = $('.navig > .nextprev > a:nth-child(3)').attr('target')
             console.log(check)
 
             if(check == "_blank" || chapter.next == null){
                 chapter.next = null
+            }else{
+                chapter.next = $('.navig > .nextprev > a:nth-child(3)').attr('href').replace(`${komikindoUrl}`, '')
             }
+        }else{
+            chapter.next = $('.navig > .nextprev > a:nth-child(4)').attr('href').replace(`${komikindoUrl}`, '')
         }
 
         chElemet.find('#chimg-auh > img').each((i, el) => {
