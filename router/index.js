@@ -4,6 +4,7 @@ const kiryuuController = require('../controllers/kiryuu')
 const mangaidController = require('../controllers/mangaid')
 const komikcastController = require('../controllers/komikcast')
 const komikindoController = require('../controllers/komikindo')
+const komikuController = require('../controllers/komiku')
 
 router.get('/kiryuu-home', kiryuuController.home)
 router.get('/kiryuu-new-update/:page', kiryuuController.new_update)
@@ -28,5 +29,6 @@ router.get('/komikindo-manhua/:page', komikindoController.manhua)
 router.get('/komikindo-komik/:page', komikindoController.komik)
 router.get('/komikindo-search/:s/page/:page', komikindoController.search)
 
+router.get('/komiku-home', komikuController.home)
 
 module.exports = router
