@@ -13,9 +13,10 @@ exports.home = async(req, res) => {
         let dataTrending = []
 
         trendingElement.find('.ls23').each((i, el) => {
+            let id = $(el).find('.ls23v > a').attr('href');
             let title = $(el).find('.ls23j > a > h4').text()
 
-            dataTrending.push({title})
+            dataTrending.push({id, title})
         })
 
         home.trending = dataTrending
