@@ -266,7 +266,7 @@ exports.daftar_komik = async (req, res) => {
             let rating = $(el).find('.animposx > .bigors > .adds > .rating > i').text()
 
             if(cover != null){
-                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+                cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,208', '')
             } else {
                 cover = ""
             }
@@ -304,7 +304,7 @@ exports.manhwa = async (req, res) => {
             let rating = $(el).find('.animposx > a > .bigors > .adds > .rating > i').text()
 
             if(cover != null){
-                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+                cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,201', '')
             } else {
                 cover = ""
             }
@@ -342,7 +342,7 @@ exports.manhua = async (req, res) => {
             let rating = $(el).find('.animposx > a > .bigors > .adds > .rating > i').text()
 
             if(cover != null){
-                cover.replace('i2.wp.com/', '').replace('?resize=146,208', '')
+                cover = $(el).find('.animposx > a > .limit > img').attr('src').replace('i2.wp.com/', '').replace('?resize=146,201', '')
             } else {
                 cover = ""
             }
